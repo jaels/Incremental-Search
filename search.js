@@ -6,49 +6,159 @@
     var textArea = document.getElementById("text");
     var counter=0;
     var addCountry="";
-    var height = document.getElementById("options").offsetHeight;
+    var bold;
+    var targetElement=null;
+    var index;
+    var height = document.getElementById("results").offsetHeight;
+    var results = document.getElementById("results");
     textArea.addEventListener("input", function(){
-height = 40;
-for (var j=0;j<counter;j++)
-{
-document.getElementById("options").innerHTML = "";
-}
+
+        index=0;
+        targetElement===null;
+
+        height = 0;
 
 
-    //    for (var j=0;j<counter;j++) {
-    //        var a = document.getElementById("body");
-    //      console.log(document.getElementsByClassName("country")[j]);
-    //    }
+        for (var j=0;j<counter+1;j++){
+            results.innerHTML = "";
+        }
 
 
         var matchCountries = countries.filter(function(name){
             return (name.slice(0, textArea.value.length).toLowerCase()===textArea.value.toLowerCase());
         });
+
+        if(matchCountries.length===0) {
+            results.style.height = "40px";
+            results.innerHTML="<p>"+"No results"+"<p>";
+            counter = 1;
+        }
+
+
+        //    for (var j=0;j<counter;j++) {
+        //        var a = document.getElementById("body");
+        //      console.log(document.getElementsByClassName("country")[j]);
+        //    }
+
+
+
+        if(textArea.value.length===0) {
+            results.innerHTML = "";
+            matchCountries=[];
+            results.style.height = "0";
+        }
+
+
         counter=0;
         for (var i=0;i<4;i++){
             if(i===matchCountries.length) {break;}
             counter+=1;
-        addCountry=document.getElementById("options").innerHTML;
+            addCountry=results.innerHTML;
 
-document.getElementById("options").innerHTML = addCountry + "<p>" + matchCountries[i] +"<p>";
-height+=40;
-document.getElementById("options").style.height = height + "px";
-
-
-        //    var newP = document.createElement("p");
-        //    var option = document.createTextNode(matchCountries[i]);
+            results.innerHTML = addCountry + "<p>" + matchCountries[i] +"</p>";
+            height+=40;
+            results.style.height = height + "px";
 
 
-        //    newP.appendChild(option);
-        //    document.body.appendChild(newP);
-        //    newP.classList.add("country");
+            //    var newP = document.createElement("p");
+            //    var option = document.createTextNode(matchCountries[i]);
+
+
+            //    newP.appendChild(option);
+            //    document.body.appendChild(newP);
+            //    newP.classList.add("country");
         }
 
-        //console.log(matchCountries);
-    }
+        document.addEventListener("click", function(e){
+            e.stopPropagation();
+            results.innerHTML = "";
+            results.style.height = "0";
+        });
+
+        results.addEventListener('click', function(e) {
+            e.stopPropagation();
+        });
+
+        results.addEventListener('mouseover', function(e) {
+            if(e.target.tagName=="P"){
+                bold = e.target.innerHTML;
+
+                e.target.style.color = "blue";
+                e.target.style.backgroundColor = "yellow";
+                targetElement = e.target;
+            }
+
+            results.addEventListener('mouseout', function(e) {
+                if(e.target.tagName=="P"){
+                    e.target.style.color = "black";
+                    e.target.style.backgroundColor = "white";
+                }});
 
 
-)
 
 
-})();
+            });
+
+
+
+
+            document.addEventListener('keydown', function(e) {
+
+                if (e.keyCode===40) {
+
+console.log(index);
+
+                    if (targetElement===null){
+                        index=0;
+                        targetElement = document.getElementsByTagName("P")[0];
+                        bold = document.getElementsByTagName("P")[0].innerHTML;
+                        document.getElementsByTagName("P")[index].style.color = "blue";
+                        document.getElementsByTagName("P")[index].style.backgroundColor = "yellow";
+                        index = matchCountries.indexOf(bold);
+
+                    }
+                    else {
+                        document.getElementsByTagName("P")[index].style.color = "black";
+                        document.getElementsByTagName("P")[index].style.backgroundColor = "white";
+
+                        document.getElementsByTagName("P")[index+1].style.color = "blue";
+                        document.getElementsByTagName("P")[index+1].style.backgroundColor = "yellow";
+                        index+=1;
+                        bold = document.getElementsByTagName("P")[index].innerHTML;
+
+                    };
+                };
+
+
+                if (e.keyCode===38) {
+                    index = matchCountries.indexOf(bold);
+                    //        console.log(index);
+
+                    document.getElementsByTagName("P")[index].style.color = "black";
+                    document.getElementsByTagName("P")[index].style.backgroundColor = "white";
+                    document.getElementsByTagName("P")[index-1].style.color ="blue";
+                    document.getElementsByTagName("P")[index-1].style.backgroundColor = "yellow";
+                    index-=1;
+                    bold = document.getElementsByTagName("P")[index].innerHTML;
+
+                }
+
+
+            });
+
+
+
+            //        document.addEventListener('keydown', function(e) {
+
+
+            //       });
+
+
+
+
+
+
+        })
+
+
+    })();
